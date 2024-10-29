@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "death-swap-mod",
+	"version": "1.4.3",
+	"name": "Death Swap Mod",
+	"description": "Dream同款死亡交换游戏！",
+	"authors": [
+		"LoongLy"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://mod.3dmgame.com/mod/207510"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/dealth-swap-mod/LZXLogo.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "name.deathswap.LGDeathSwapMod"
+		]
+	},
+	"mixins": [
+		"death-swap-mod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.16.5",
+		"java": ">=8",
+		"fabric": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
