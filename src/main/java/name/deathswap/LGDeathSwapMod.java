@@ -83,9 +83,9 @@ public class LGDeathSwapMod implements ModInitializer
 
 	String _modName = "DeathSwap";
 
-	String _modVersion = "1.4.3";
+	String _modVersion = "1.4.4";
 	//List<BlockPos> safePos = null;
-	String _lastEditTime = "2024/07/14";
+	String _lastEditTime = "2024/11/04";
 
 	String []_modInfo = {_modAuthor,_modName,_modVersion,_lastEditTime};
 	@Override
@@ -216,6 +216,11 @@ public class LGDeathSwapMod implements ModInitializer
 			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to jump to: " + "https://mod.3dmgame.com/mod/207510")))
 			.withColor(Formatting.UNDERLINE));
 		source.sendFeedback(msg2, false);
+		Text gitmsg = new LiteralText("github链接: https://github.com/Long-Zixuan/Dealth-Swap").styled(style->style
+				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Long-Zixuan/Dealth-Swap"))
+				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to jump to: " + "https://github.com/Long-Zixuan/Dealth-Swap")))
+				.withColor(Formatting.UNDERLINE));
+		source.sendFeedback(gitmsg, false);
 	}
 
 	private void initStartGame(boolean needTransPos,ServerCommandSource source)
