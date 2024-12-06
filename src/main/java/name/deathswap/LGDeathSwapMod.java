@@ -83,9 +83,9 @@ public class LGDeathSwapMod implements ModInitializer
 
 	String _modName = "DeathSwap";
 
-	String _modVersion = "1.4.4";
+	String _modVersion = "1.5";
 	//List<BlockPos> safePos = null;
-	String _lastEditTime = "2024/11/04";
+	String _lastEditTime = "2024/12/06";
 
 	String []_modInfo = {_modAuthor,_modName,_modVersion,_lastEditTime};
 	@Override
@@ -152,13 +152,13 @@ public class LGDeathSwapMod implements ModInitializer
 							}
 							// 获取命令参数中的值
 							int swaptime = IntegerArgumentType.getInteger(context, "value");
-							// 更新变量的值
-							deathSwapTime = swaptime;
 							if(swaptime<40)
 							{
 								context.getSource().sendFeedback(new LiteralText("交换时间不得小于40秒"), false);
 								return 1;
 							}
+							// 更新变量的值
+							deathSwapTime = swaptime;
 							// 发送消息给执行命令的玩家
 							context.getSource().sendFeedback(new LiteralText("交换时间更新为： " + swaptime), false);
 							return 1;
@@ -229,7 +229,7 @@ public class LGDeathSwapMod implements ModInitializer
 		winText = "No Winner";
 		MinecraftServer server = source.getMinecraftServer();
 		//server.getGameRules().get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
-		World world = server.getWorld(World.OVERWORLD);
+		//World world = server.getWorld(World.OVERWORLD);
 		List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
 		playerNum = players.size();
 		if (players.size() < 2)
@@ -246,8 +246,19 @@ public class LGDeathSwapMod implements ModInitializer
 
 		for (ServerPlayerEntity player : players)
 		{
-			Text msg = new LiteralText("游戏开始！").formatted(Formatting.YELLOW);
+			Text msg = new LiteralText("☯少女祈祷中。。。。☯").formatted(Formatting.RED);
 			player.sendMessage(msg,true);
+			Random random = new Random();
+			//BlockPos blockPos = findSafePos(random.nextInt(5000),50, random.nextInt(5000));
+			//BlockPos blockPos = findSafePos();
+			//player.teleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			player.setInvulnerable(true);
+			if(needTransPos)
+			{
+				World world = player.world;
+				TransAsyncThread asyncThread = new TransAsyncThread(player,world);
+				asyncThread.start();
+			}
 			player.setGameMode(GameMode.SURVIVAL);
 			player.setHealth(20);
 			player.getHungerManager().setFoodLevel(20);
@@ -256,91 +267,19 @@ public class LGDeathSwapMod implements ModInitializer
 			player.inventory.clear();
 
 
-			Random random = new Random();
-			//BlockPos blockPos = findSafePos(random.nextInt(5000),50, random.nextInt(5000));
-			//BlockPos blockPos = findSafePos();
-			//player.teleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-			player.setInvulnerable(true);
-			if(needTransPos)
-			{
-				AsyncThread asyncThread = new AsyncThread(player,world);
-				asyncThread.start();
-			}
+
+			msg = new LiteralText("游戏开始!").formatted(Formatting.YELLOW);
+			player.sendMessage(msg,true);
 		}
 	}
 	private void startGame(ServerCommandSource source)
 	{
 		initStartGame(true,source);
-		/*startTime = Instant.now().getEpochSecond();
-		winText = "No Winner";
-		MinecraftServer server = source.getMinecraftServer();
-		server.getGameRules().get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
-		World world = server.getWorld(World.OVERWORLD);
-		List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
-		playerNum = players.size();
-		if (players.size() < 2)
-		{
-			LOGGER.info("Not enough players to swap positions.");
-			Text msg = new LiteralText("Not enough players to swap positions.").formatted(Formatting.YELLOW);
-			players.get(0).sendMessage(msg,true);
-			return;
-		}
-		isGameStarting = true;*/
-		//ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
-
-
-
-		/*for (ServerPlayerEntity player : players)
-		{
-			Text msg = new LiteralText("Death swap game started!").formatted(Formatting.YELLOW);
-			player.sendMessage(msg,true);
-			player.setGameMode(GameMode.SURVIVAL);
-			player.setHealth(20);
-			player.getHungerManager().setFoodLevel(20);
-			player.getHungerManager().setSaturationLevel(1.0F);
-
-			Random random = new Random();
-			//BlockPos blockPos = findSafePos(random.nextInt(5000),50, random.nextInt(5000));
-			//BlockPos blockPos = findSafePos();
-			//player.teleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-			player.setInvulnerable(true);
-			AsyncThread asyncThread = new AsyncThread(player,world);
-			asyncThread.start();
-
-		}*/
-
 	}
 
 	private void StartGame2(ServerCommandSource source)
 	{
 		initStartGame(false,source);
-		/*startTime = Instant.now().getEpochSecond();
-		winText = "No Winner";
-		MinecraftServer server = source.getMinecraftServer();
-		server.getGameRules().get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
-		World world = server.getWorld(World.OVERWORLD);
-		List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
-		playerNum = players.size();
-		if (players.size() < 2)
-		{
-			LOGGER.info("Not enough players to swap positions.");
-			Text msg = new LiteralText("Not enough players to swap positions.").formatted(Formatting.YELLOW);
-			players.get(0).sendMessage(msg,true);
-			return;
-		}
-		isGameStarting = true;
-		//ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
-
-		for (ServerPlayerEntity player : players)
-		{
-			//player.kill();
-			Text msg = new LiteralText("Death swap game started!").formatted(Formatting.YELLOW);
-			player.setHealth(20);
-			player.getHungerManager().setFoodLevel(20);
-			player.getHungerManager().setSaturationLevel(1.0F);
-			player.sendMessage(msg,true);
-			player.setGameMode(GameMode.SURVIVAL);
-		}*/
 	}
 
 
@@ -471,71 +410,11 @@ public class LGDeathSwapMod implements ModInitializer
 			swapPlayerPos(minecraftServer.getPlayerManager().getPlayerList());
 			shouldSendMSG = true;
 		}
-		/*if (minecraftServer.getTicks() % (20 * (deathSwapTime-1)) == 0)
-		{
-			sendMSGForEveryPlayer(minecraftServer,"Death swap in 1 second");
-		}
-		else if (minecraftServer.getTicks() % (20 * (deathSwapTime-2)) == 0)
-		{
-			sendMSGForEveryPlayer(minecraftServer,"Death swap in 2 second");
-		}
-		else if (minecraftServer.getTicks() % (20 * (deathSwapTime-3)) == 0)
-		{
-			sendMSGForEveryPlayer(minecraftServer,"Death swap in 3 second");
-		}
-		else if (minecraftServer.getTicks() % (20 * (deathSwapTime-4)) == 0)
-		{
-			sendMSGForEveryPlayer(minecraftServer,"Death swap in 4 second");
-		}
-		else if (minecraftServer.getTicks() % (20 * (deathSwapTime-5)) == 0)
-		{
-			sendMSGForEveryPlayer(minecraftServer,"Death swap in 5 second");
-		}
-		if (minecraftServer.getTicks() % (20 * deathSwapTime) == 0)
-		{
-			LOGGER.info("Swap");
-			swapPlayerPos(minecraftServer.getPlayerManager().getPlayerList());
-		}*/
 	}
 	private void swapPlayerPos(List<ServerPlayerEntity> players)
 	{
 		SwapPosAsync swapPosAsync = new SwapPosAsync(players);
 		swapPosAsync.start();
-		/*List<ServerPlayerEntity> alivePlayers = new ArrayList<ServerPlayerEntity>();
-		for(ServerPlayerEntity player : players)
-		{
-			if (player.interactionManager.getGameMode() == GameMode.SURVIVAL && player.getHealth()>0)
-			{
-				alivePlayers.add(player);
-			}
-		}
-
-		if (alivePlayers.size() < 2)
-		{
-			LOGGER.info("Not enough players to swap positions.");
-			Text msg = new LiteralText("Not enough players to swap positions.").formatted(Formatting.YELLOW);
-			players.get(0).sendMessage(msg,false);
-			return;
-		}
-
-
-		ServerPlayerEntity player1 = alivePlayers.get(0);
-		double tempX = player1.getX();
-		double tempY = player1.getY();
-		double tempZ = player1.getZ();
-		for(int i = 0; i < alivePlayers.size()-1; i++)
-		{
-			ServerPlayerEntity tmpPlayer = alivePlayers.get(i);
-			tmpPlayer.teleport(alivePlayers.get(i+1).getX(), alivePlayers.get(i+1).getY(), alivePlayers.get(i+1).getZ());
-			Text msg = new LiteralText("You are swapped positions with " + alivePlayers.get(i+1).getGameProfile().getName()).formatted(Formatting.YELLOW);
-			tmpPlayer.sendMessage(msg,false);
-		}
-		ServerPlayerEntity lastPlayer = alivePlayers.get(alivePlayers.size()-1);
-		lastPlayer.teleport(tempX, tempY, tempZ);
-		Text msg = new LiteralText("You are swapped positions with " + player1.getGameProfile().getName()).formatted(Formatting.YELLOW);
-		lastPlayer.sendMessage(msg,false);
-		alivePlayers.clear();*/
-
 	}
 }
 
