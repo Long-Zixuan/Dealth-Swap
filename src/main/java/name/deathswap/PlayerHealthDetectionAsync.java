@@ -29,13 +29,13 @@ public class PlayerHealthDetectionAsync extends Thread
     {
         ServerTickEvents.START_SERVER_TICK.register(this::playerHealthDetection);
     }
-    private MinecraftServer _server;
+    //private MinecraftServer _server;
 
     private String[] _modInfo;
 
-    public PlayerHealthDetectionAsync(MinecraftServer server,String[] modInfo)
+    public PlayerHealthDetectionAsync(String[] modInfo)
     {
-        _server = server;
+        //_server = server;
         _modInfo = modInfo;
     }
 
@@ -50,10 +50,19 @@ public class PlayerHealthDetectionAsync extends Thread
 
             if(players.size()>LGDeathSwapMod.playerNum)
             {
-                LGDeathSwapMod.playerNum = players.size();
-                players.get(LGDeathSwapMod.playerNum-1).sendMessage(new LiteralText(_modInfo[0]+":欢迎加入死亡交换游戏！").formatted(Formatting.YELLOW),false);
+                players.get(players.size()-1).sendMessage(new LiteralText(_modInfo[0]+":欢迎加入死亡交换游戏！").formatted(Formatting.YELLOW),false);
             }
+            LGDeathSwapMod.playerNum = players.size();
             return;
+        }
+        else
+        {
+            if(players.size()>LGDeathSwapMod.playerNum)
+            {
+                players.get(players.size()-1).sendMessage(new LiteralText(_modInfo[0]+":欢迎加入死亡交换游戏！游戏已经开始，你现在处于旁观模式").formatted(Formatting.YELLOW),false);
+                players.get(players.size()-1).setGameMode(GameMode.SPECTATOR);
+            }
+            LGDeathSwapMod.playerNum = players.size();
         }
         for (ServerPlayerEntity player : players)
         {

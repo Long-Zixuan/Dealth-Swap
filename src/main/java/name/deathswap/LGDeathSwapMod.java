@@ -83,7 +83,7 @@ public class LGDeathSwapMod implements ModInitializer
 
 	String _modName = "DeathSwap";
 
-	String _modVersion = "1.5";
+	String _modVersion = "1.5.2";
 	//List<BlockPos> safePos = null;
 	String _lastEditTime = "2024/12/06";
 
@@ -132,7 +132,7 @@ public class LGDeathSwapMod implements ModInitializer
 
 	private void initPlayerHealthDetectionAsync(MinecraftServer server)
 	{
-		PlayerHealthDetectionAsync playerHealthDetectionAsync = new PlayerHealthDetectionAsync(server,_modInfo);
+		PlayerHealthDetectionAsync playerHealthDetectionAsync = new PlayerHealthDetectionAsync(_modInfo);
 		playerHealthDetectionAsync.start();
 	}
 
