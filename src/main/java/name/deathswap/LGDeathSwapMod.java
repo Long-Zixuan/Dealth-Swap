@@ -83,9 +83,9 @@ public class LGDeathSwapMod implements ModInitializer
 
 	String _modName = "DeathSwap";
 
-	String _modVersion = "1.5.2";
+	String _modVersion = "1.5.2.1";
 	//List<BlockPos> safePos = null;
-	String _lastEditTime = "2024/12/06";
+	String _lastEditTime = "2024/12/07";
 
 	String []_modInfo = {_modAuthor,_modName,_modVersion,_lastEditTime};
 	@Override
@@ -94,6 +94,7 @@ public class LGDeathSwapMod implements ModInitializer
 		//PlayerDeathCallback.EVENT.register(this::onPlayerDeath);
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::initPlayerHealthDetectionAsync);
+		ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {isGameStarting = false;});
 
 		ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
 		//PlayerDeathCallback.EVENT.register(this::onPlayerDeath);
@@ -265,7 +266,7 @@ public class LGDeathSwapMod implements ModInitializer
 			player.getHungerManager().setSaturationLevel(1.0F);
 			//player.clearActiveItem();
 			player.inventory.clear();
-
+			player.setInvulnerable(false);
 
 
 			msg = new LiteralText("游戏开始!").formatted(Formatting.YELLOW);
@@ -418,5 +419,5 @@ public class LGDeathSwapMod implements ModInitializer
 	}
 }
 
-//LZX completed this code in 2024/03/21
+//LZX completed this code in 2024/12/07
 //LZX-TC-2024-03-21-001
